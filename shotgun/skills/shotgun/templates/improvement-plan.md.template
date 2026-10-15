@@ -1,9 +1,8 @@
 # Ordered queue
 
-This file alone owns order and status. Resume in-progress work first; otherwise
-select the first ready task whose prerequisites are satisfied. Status vocabulary:
+This file alone owns order and status, and holds open work only. Status vocabulary:
 ready, in progress, blocked, planned, done, deferred, rejected. Only done means
-acceptance evidence exists. No task is complete just because code was written.
+acceptance evidence exists.
 
 ## Maintenance interrupts
 
@@ -17,6 +16,7 @@ Why: {{USER_VALUE_OR_RISK}}
 Scope and exclusions: {{BOUNDARIES}}
 Dependencies: {{PREREQUISITES_OR_NONE}}
 Read: {{RELEVANT_EXISTING_FILES_OR_NONE_YET}}
+Decided with the owner: {{DATED_ANSWERS_OR_NONE_YET}}
 Acceptance: {{OBSERVABLE_CHECKS_AND_REQUIRED_EVIDENCE}}
 Evidence: none yet.
 
@@ -24,15 +24,23 @@ If interrupted, record here: current result, changed/uncommitted files, missing
 checks, external residue, and exact next action. If blocked, record the owner and
 unblock condition. Replace obsolete resume instructions when work continues.
 
-When the task reaches done and learning mode is on, rewrite the "What just changed
-and why" section of current-state.md to explain this item to the owner. Nothing is
-added here. The queue holds the evidence and the explanation lives in one place that
-the next item overwrites.
+When a task reaches done or rejected, move its whole block unchanged, evidence
+included, to the end of `project-context/done.md`. Create that file with the heading
+`# Done items` if needed. Add a line for the task under Done. A deferred task stays
+here, and so does a task whose status says part of the work is still open.
 
 ## Later milestones
 
 {{ONLY_JUSTIFIED_PROVISIONAL_MILESTONES_OR_NONE}}
 
-Promote a milestone to a bounded task when its prerequisites are understood. Add
-only the next few detailed tasks. Preserve completed evidence with concise links;
-move long historical narratives out of startup reading without losing unique proof.
+Promote a milestone to a task once its prerequisites are understood. Detail only the
+next few tasks.
+
+## Done
+
+Finished tasks, one line each, oldest first. Full text is in `project-context/done.md`.
+
+{{ONE_LINE_PER_FINISHED_TASK_OR_NONE_YET}}
+
+Write each line as `- Q4: <title> [done 2026-09-15]`. Use the finish date the block
+states. Never take a date from the evidence, and leave it out if none is stated.

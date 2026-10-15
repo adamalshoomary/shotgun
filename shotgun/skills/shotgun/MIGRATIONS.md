@@ -21,6 +21,113 @@ version recorded in the project's AGENTS.md.
 
 ---
 
+## 5.0.0 (2026-10-15)
+
+**Finished items leave the queue.** A done or rejected item moves, word for word, to
+`project-context/done.md`. The queue keeps one line for it in a new `## Done` section
+at the bottom. The heading comparison reports the missing `## Done` section. It cannot
+see the items that must move, or the two AGENTS.md sentences below.
+
+Move the items in this order:
+
+1. List every task in improvement-plan.md whose status starts with done or rejected.
+   A reason or a date after the status still moves, such as "rejected: merged into
+   Q31". A status that says part of the work is still open stays, such as "done in
+   software; hardware is Adam's". A deferred task stays.
+2. Show the owner the list with each item's word count, and ask once before you move
+   anything.
+3. Count the words in improvement-plan.md before you change it.
+4. Move each listed block unchanged to the end of `project-context/done.md`, in queue
+   order. A block runs from its task heading to the next heading at the same level or
+   higher. If no heading follows the last task, end its block before any paragraph
+   that speaks about the whole queue. If the end is unclear, ask the owner. Create the
+   file with the heading `# Done items` if it does not exist.
+5. Count again. The words removed from the queue must equal the words in the moved
+   blocks in `done.md`. If the counts differ, put the queue back and stop.
+6. Add the `## Done` section from the template at the end of improvement-plan.md. Add
+   one line for each moved item, oldest first by queue id.
+7. Search the queue for links into a moved block, such as `#q12`. Point each one at
+   `project-context/done.md`.
+
+Leave everything else in the queue as it is, including preamble text the owner wrote
+about finished items.
+
+In AGENTS.md, two sentences are new. Show the owner the current paragraph and the
+proposed paragraph side by side, then ask before you change either:
+
+- After the startup reading paragraph: "Finished queue items live in
+  `project-context/done.md`. Read it only for a concrete reason, such as a dependency
+  on a finished item."
+- In the Handoff section, after "link it under the task": "When an item reaches done
+  or rejected, move it to `project-context/done.md` as the queue describes."
+
+If you apply the AGENTS.md change below in the same update, skip these two sentences.
+The new AGENTS.md and WORKFLOW.md already carry both.
+
+**AGENTS.md is short, and the procedure moved to `project-context/WORKFLOW.md`.**
+Claude Code and Codex load AGENTS.md into every session, and Claude Code's docs advise
+under 200 lines. The heading comparison sees the new `## Start here`, `## Every turn`
+and `## Project rules` headings. It cannot see which old text to remove.
+
+1. Copy `<kit>/WORKFLOW.md` to `project-context/WORKFLOW.md` unchanged.
+2. Count the lines of AGENTS.md.
+3. Find the shotgun sections that WORKFLOW.md and the new template now cover: the
+   unheaded paragraphs under the version line, including any `done.md` sentence that the
+   queue part added, and `## Work`, `## Asking`,
+   `## Writing`, `## Reporting to the owner`, `## Execution` and `## Handoff`. An
+   owner may have renamed one, for example "Reporting to Adam". Match on meaning.
+4. Read each of those sections sentence by sentence. A sentence is shotgun text when
+   its rule appears in WORKFLOW.md or in the new template. Any other sentence is owner
+   text.
+5. Propose to replace those sections with the template's `## Start here` and
+   `## Every turn` sections. Carry the owner text word for word into
+   `## Project rules`.
+6. In the version-line paragraph, `## Authority and permissions`,
+   `## Environment and access`,
+   `## Naming the chat` and `## Commits`, propose the template's shorter shotgun
+   paragraphs. Keep every line the owner filled in, such as each Environment entry and
+   the `Chat prefix:` line.
+7. Add `## Project rules` at the end if the file has none.
+8. Show the owner each section's current text and proposed text side by side. Ask once
+   for each section.
+9. Then list each owner section of about 20 lines or 300 words or more. Count words
+   too, because some owners write a whole section on one line. Keep the Authority and
+   Environment entries in their sections, however long they are. For each one, offer to move
+   it word for word to its own file in `project-context/`, such as
+   `project-context/publishing.md`, and leave a one-line link where it was. Ask once
+   for each section.
+10. Count the lines again. Report the count before and after, and whether the file is
+    under 200 lines.
+
+Never delete owner text. If a sentence could be either shotgun text or owner text,
+treat it as owner text.
+
+**Answers are recorded, and agents ask about every open decision.** The agent asks
+about every decision still open, with the recommended option first and marked. Each
+answer goes under its queue item in a "Decided with the owner" list,
+with the date. The new AGENTS.md and WORKFLOW.md carry both rules. The queue template
+gains a `Decided with the owner:` line in each task block. Do not add the line to
+existing tasks during the update. The next question round on a task adds it.
+
+**Learning mode is removed.** The `learn` and `explain` commands are gone, and so are
+the kit's `LEARNING.md` and `ORCHESTRATION.md`. The heading comparison cannot report a
+removal, so apply each step below. Show the owner each change and ask once for each.
+
+1. In AGENTS.md, delete the `## Learning mode` section and its `Learning mode:` line.
+2. In current-state.md, show the owner the "What just changed and why" section. It may
+   hold text they want to keep. If they say yes, delete it.
+3. In improvement-plan.md, delete the paragraph that begins "When the task reaches done
+   and learning mode is on".
+4. Delete `project-context/LEARNING.md` and `project-context/ORCHESTRATION.md`. If the
+   owner edited `ORCHESTRATION.md`, for example with their own model choices, offer to
+   move those lines word for word into `## Project rules` in AGENTS.md first.
+5. Search AGENTS.md for links to either file, and for "learning mode". Propose a
+   change for each line found.
+
+Leave any `learning/` folder exactly as it is. It is the owner's history.
+
+---
+
 ## 4.0.0 (2026-10-15)
 
 **The command is now `/shotgun`.** It was `/handoff`. Codex users type `$shotgun`.

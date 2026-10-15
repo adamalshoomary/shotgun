@@ -1,7 +1,7 @@
 ---
 name: shotgun
-description: Run the shotgun handoff system in this project, so any coding agent can resume work another one stopped. Use for setting up the handoff files in a new project, taking over queue work from another agent or another session, changing learning mode, reporting queue status, or updating shotgun. Triggers on "shotgun", "set up handoff", "continue the queue", "what is next in the plan", "take over this project", "learning mode".
-argument-hint: setup | continue | status | learn <on|off> | explain | update
+description: Run the shotgun handoff system in this project, so any coding agent can resume work another one stopped. Use for setting up the handoff files in a new project, taking over queue work from another agent or another session, reporting queue status, or updating shotgun. Triggers on "shotgun", "set up handoff", "continue the queue", "what is next in the plan", "take over this project".
+argument-hint: setup | continue | status | update
 arguments: [command, value]
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, WebFetch, WebSearch
 ---
@@ -17,7 +17,7 @@ say which you chose before acting.
 ## Two places, and never confuse them
 
 **The kit** is the directory holding this file. `VERSION`, `MIGRATIONS.md`, `SETUP.md`,
-`CONTINUE.md`, `LEARNING.md`, `ORCHESTRATION.md` and `templates/` all sit
+`CONTINUE.md`, `WORKFLOW.md` and `templates/` all sit
 beside it. Claude Code gives you that path as `${CLAUDE_SKILL_DIR}`. Elsewhere, take the
 directory of this file. Every filename below written as `<kit>/something` means a file
 in there.
@@ -43,8 +43,7 @@ reads the same files without this skill, so never write a rule that lives only h
 ## setup
 
 Read `<kit>/SETUP.md` and apply it to the current project root.
-Confirm the root before writing anything. Ask the owner the learning-mode question
-that `<kit>/SETUP.md` specifies, and write `on` or `off` into the new AGENTS.md.
+Confirm the root before writing anything.
 
 ## continue
 
@@ -61,21 +60,11 @@ stop. Write nothing.
 - Next ready item
 - Blocked items, each with its blocker and unblock action
 - Due maintenance interrupts
-- Current learning mode, read from AGENTS.md
 
-## learn
+## learn, explain
 
-Accept `on` and `off`.
-
-Set the `Learning mode:` line in AGENTS.md, then confirm what changed in one sentence.
-With no value given, say which it is now and what each one does in one sentence each.
-
-On: every finished queue item rewrites the "What just changed and why" section of
-current-state.md in plain language, and the agent says in one sentence that it is
-there. Off: nothing is written and nothing is said.
-
-Editing AGENTS.md makes the change permanent. An owner who wants it for one session
-says so in conversation, and you leave the file alone.
+Learning mode was removed in 5.0.0. If someone types `learn` or `explain`, say so in
+one line and do nothing else.
 
 ## update
 
@@ -133,7 +122,7 @@ installed on this machine, then the project.
 4. Compare structure, never content. For each file in `<kit>/templates/`, list the section
    headings and marker lines the template carries, and check the project's
    corresponding file for each one. Check file presence too:
-   `project-context/LEARNING.md` and `project-context/ORCHESTRATION.md`. Ignore
+   `project-context/WORKFLOW.md`. Ignore
    everything written underneath a heading; that is the owner's project, and none of
    it is yours to reconcile.
 5. Match on meaning, and never on characters. A setup agent may have reworded a
@@ -157,20 +146,18 @@ migration block calls for a change to something already written, show the owner 
 current text and the proposed text side by side and ask. A `learning/` directory left
 by an older version is the owner's history: leave it exactly as it is.
 
-## explain
-
-Rewrite the "What just changed and why" section of current-state.md for the most
-recently completed queue item, or for an item the owner names, even when learning mode
-is off. Read the project's `project-context/LEARNING.md` first, falling back to
-`<kit>/LEARNING.md` when the project has no copy. Replace the section outright. Add
-nothing to the queue.
+One file is the exception. `project-context/WORKFLOW.md` is kit text. Replace it whole
+with `<kit>/WORKFLOW.md` on every update, and tell the owner in one line.
 
 ## Always
 
-Ask in rounds, using the platform's structured question tool, for as long as another
-round would change what you build. Ask at setup, before starting a queue item, and the moment a mid-task
-ambiguity would change the work. Ask nothing the source or the startup files answer.
-Give every option a named consequence. When the owner says go, start.
+Ask with the structured question tool: `AskUserQuestion` in Claude Code,
+`ask_user_question` in Codex. Never ask in plain text where the tool exists. Ask about
+every open decision that would change the work, in rounds for as long as another round would change what you build. Ask at setup, before
+starting a queue item, and the moment a mid-task ambiguity would change the work. Ask
+nothing the source, the startup files or a "Decided with the owner" list answers. Put
+the recommended option first, and give every option a named consequence. When the
+owner says go, start.
 
 Read the Environment section of AGENTS.md before reaching for a browser, a database
 or an external service. It records what the owner permits and prefers, and what to do
@@ -224,6 +211,5 @@ outranks the platform default.
 
 Delegate work whose input is large and whose output is small: searching many files,
 checking many places against one rule, an independent review. State the return format
-before spawning. Keep the decisions in this session. The project's
-`project-context/ORCHESTRATION.md` holds the model table and the reasoning, and
-`<kit>/ORCHESTRATION.md` is the fallback when the project has no copy.
+before spawning. Keep the decisions in this session. A subagent cannot ask the owner
+anything, so ask in this session and pass the answers on.

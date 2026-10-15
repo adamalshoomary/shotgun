@@ -9,18 +9,9 @@ Verification: {{DATED_EVIDENCE_OR_NOT_YET_VERIFIED}}
 Source location/revision and uncommitted work: {{OBSERVED_GIT_STATE_OR_NO_GIT}}
 Deployment: {{ENVIRONMENT_VERSION_AND_EVIDENCE_OR_NOT_DEPLOYED}}
 
-## What just changed and why
-
-{{PLAIN_EXPLANATION_OF_THE_LAST_FINISHED_ITEM_OR_NOTHING_FINISHED_YET}}
-
-Written for the owner, rewritten in full every time a queue item is finished, and
-holding only the most recent one. Agents do not read this section for context. Delete
-the whole section when learning mode is off.
-
 ## Limits and unresolved observations
 
 {{PRESENT_LIMITATIONS_AND_UNKNOWNS_WITH_RELEVANT_LINKS}}
 
-Work order, blockers and any interrupted-task resume instructions are maintained
-only in improvement-plan.md. Do not copy that queue here. Put detailed operational
-facts in supporting files only when the active work needs them.
+Keep work order, blockers and resume instructions in improvement-plan.md only. Put
+detailed operational facts in supporting files when the active work needs them.

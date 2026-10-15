@@ -13,13 +13,19 @@ Setup is the single best moment to ask, because everything you learn here saves 
 owner from remembering it in every session afterwards.
 
 Use the platform's structured question tool: `AskUserQuestion` in Claude Code,
-`ask_user_question` in Codex. Ask in rounds of three or four. Read the answers, then
-ask the next round informed by them. Keep going for as long as another round would
-change what you write. The owner can end any round by saying go.
+`ask_user_question` in Codex. Ask about every decision still open, up to four questions
+in a round. Put the recommended option first, and mark it. Read the answers,
+then ask the next round informed by them. Keep going for as long as another round would
+change what you write. The owner can end any round by saying go. After go, use the
+setup default for each question left unasked. Mark each default in its file as not yet
+confirmed by the owner. Still tell the owner about the attribution rule in your summary.
+
+At setup no queue item exists yet. Record each answer in the file that owns the fact,
+such as project-purpose.md for the outcome. Record each answer once.
 
 Cover at least: the outcome and who it serves, hard constraints, what is explicitly
-out of scope, commit and deployment permissions, the first one to three tasks, the
-learning mode, and the environment section below. Ask nothing the folder itself
+out of scope, commit and deployment permissions, the first one to three tasks, and the
+environment section below. Ask nothing the folder itself
 answers. Read the folder first.
 
 ## Environment and access
@@ -49,20 +55,13 @@ Those record the work of maintaining shotgun, and nothing in them belongs to the
 target. A target project starts its four files from the
 templates, filled in with facts you verified in the target.
 
-Copy the kit's ORCHESTRATION.md and LEARNING.md into the target's
-`project-context/` directory. Both are optional references linked from AGENTS.md,
-and neither one is startup reading. Adapt the model preference table to the owner's
-platform, keeping every explicit choice the owner has stated. Install no profiles
-and change no global settings.
+Copy the kit's WORKFLOW.md unchanged into the target's `project-context/` directory.
+Agents read it before they start a queue item, and `/shotgun update` replaces it whole.
+Install no profiles and change no global settings.
 
 Ask the owner for a short name for the project, two words at most, and write it into
 the `Chat prefix:` line of AGENTS.md. Every chat is titled with it, so a long one is a
 long title. Suggest one from the folder name and let them correct it.
-
-Ask the owner whether learning mode is on or off, and write it into AGENTS.md. The
-default is on. Say what each does in one sentence before asking: on rewrites a section
-of current-state.md in plain language every time an item is finished and tells them it
-is there, off writes nothing. Neither one interrupts them.
 
 The four startup files are the entry point for a new agent taking over queue work,
 and no agent rereads them before every edit. Follow-ups reuse known context; explicit
@@ -101,11 +100,13 @@ what the project is missing.
 
 ## How to structure it
 
-Give each fact one authoritative home. AGENTS.md defines the protocol, the reading
-order, the learning mode and how to report to the owner. Project purpose defines intended
+Give each fact one authoritative home. AGENTS.md holds the rules for every turn, the
+reading order and the project's own rules. Keep it under 200 lines.
+WORKFLOW.md holds the procedure. Project purpose defines intended
 outcome and boundaries. Current state says what exists now. Improvement plan alone
 holds task order, status, acceptance, blockers and the exact resume action for
-partial work. Link to evidence rather than copying it across files. Create supporting
+partial work. Finished tasks move to `project-context/done.md`. Do not create that
+file at setup. The first finished task creates it. Link to evidence rather than copying it across files. Create supporting
 records only when needed.
 
 Detail the next one to three bounded tasks, and write no speculative feature
@@ -123,8 +124,7 @@ then optimization, then automation; install no memory infrastructure by default.
 ## Before delivery
 
 Check links, placeholders, authority conflicts and startup size. Verify the
-execution reference link, the learning reference link, the main and worker model
-preferences, and the pre-change checkpoint rule. Simulate partial and blocked task
+workflow link and the pre-change checkpoint rule. Simulate partial and blocked task
 handoffs. Explain the folder, the first task and how to continue with another agent.
 
 Write the setup summary the way every later report has to read: plain, short, and

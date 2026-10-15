@@ -18,7 +18,7 @@ Four plain files in your project hold the plan, the progress and the rules.
 your-project/
 ├── AGENTS.md             the rules every agent follows
 ├── project-purpose.md    what you are building and for whom
-├── current-state.md      what works now, and what just changed
+├── current-state.md      what works now, and what does not yet
 └── improvement-plan.md   the task queue
 ```
 
@@ -78,7 +78,6 @@ The agent reads the four files, finishes any task it left half done, and explain
 Other commands:
 
 - `/shotgun status` shows what is in progress, what is next and what is blocked.
-- `/shotgun learn on` or `off` sets whether the agent explains each finished task to you in `current-state.md`. It is on by default.
 - `/shotgun update` installs a newer shotgun and adds anything new to your project's files. It asks before it changes anything.
 
 ## Limits

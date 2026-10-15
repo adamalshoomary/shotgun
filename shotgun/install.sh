@@ -4,14 +4,14 @@
 #   curl -fsSL https://github.com/adamalshoomary/shotgun/releases/latest/download/install.sh | sh
 #   sh shotgun/install.sh      from a clone: installs the copy in that clone
 #
-# The skill needs its whole folder: SKILL.md, VERSION, five guides and templates/.
+# The skill needs its whole folder: SKILL.md, VERSION, four guides and templates/.
 # Claude Code reads ~/.claude/skills. Codex, Gemini CLI, Cursor and most other agents read ~/.agents/skills.
 # A release holds its files flat. SHOTGUN_FROM sets another address for them; CI uses it to test a build.
 # Keep FILES and TEMPLATES in step with install.ps1 and tools/release_files.py.
 set -e
 
 FROM="${SHOTGUN_FROM:-https://github.com/adamalshoomary/shotgun/releases/latest/download}"
-FILES="SKILL.md VERSION SETUP.md CONTINUE.md LEARNING.md ORCHESTRATION.md MIGRATIONS.md"
+FILES="SKILL.md VERSION SETUP.md CONTINUE.md WORKFLOW.md MIGRATIONS.md"
 # A release cannot hold a file whose name starts with a dot, so .gitignore.template travels as gitignore.template.
 TEMPLATES="AGENTS.md.template current-state.md.template improvement-plan.md.template project-purpose.md.template gitignore.template"
 SRC=""

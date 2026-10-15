@@ -2,74 +2,55 @@
 
 Shotgun version: {{VERSION_FROM_KIT_VERSION_FILE}}
 
-Leave that line alone unless you are running an update. It records which version of
-shotgun this project adopted, and `/shotgun update` reads it to work out what has
-changed since.
+Leave that line alone unless you are running `/shotgun update`.
 
-When a new agent takes over a queue item, read this file, current-state.md,
-project-purpose.md, and improvement-plan.md in order. For follow-ups, reuse known
-context; reread only changed or relevant material. For a small, explicitly requested
-standalone edit, read applicable instructions and relevant files rather than the full
-startup set. If scope or context is unclear, consult the startup files. Read supporting
-records only as needed; do not load historical archives without a concrete reason.
+## Start here
+
+When you take over a queue item, read this file, current-state.md, project-purpose.md
+and improvement-plan.md, in that order. Before you start a queue item, read
+[project-context/WORKFLOW.md](project-context/WORKFLOW.md). For a follow-up, reuse
+what you know and reread only changed or relevant files. For a small, explicitly
+requested standalone edit, read only the instructions and files it needs. If scope or
+context is unclear, read the startup files. Read supporting records only as needed.
+Read `project-context/done.md`, which holds finished items, and other history only for
+a concrete reason.
+
+## Every turn
+
+1. The owner's current explicit instructions override older project instructions.
+2. The queue alone owns task order and status.
+3. Ask the owner at any time, with the structured question tool: `AskUserQuestion` in
+   Claude Code, `ask_user_question` in Codex. If neither exists, ask in numbered form
+   and suggest answers.
+4. Ask about every open decision as soon as it would change the work. Ask up to four
+   questions a round, with follow-ups, until no answer would change it. Put your
+   recommended option first, and mark it. Give every option a consequence.
+5. Never ask what the files already answer, or a decided question. Record each answer
+   under its queue item in "Decided with the owner", with the date.
+6. If the owner says go, proceed or just do it, state your assumptions in one line and
+   start.
+7. Report what someone can now do that they should not, or what the owner can now do
+   that they could not. Open a session in six lines or fewer: what is broken, then the
+   one thing that needs the owner, then stop.
+8. Never open with your plan or list your steps. Leave out which files you resolved,
+   which version matched and how many commands you ran.
+9. Never explain a discrepancy that the owner has not noticed and is not affected by.
+   Name a file, a function, a rule number or a queue item only when the owner asks or
+   has to open it.
+10. Write plainly: short sentences, no jargon, no filler, and no term the owner has not
+    used first.
+11. Before you delegate to another agent, read Execution in `project-context/WORKFLOW.md`.
 
 ## Authority and permissions
-
-The user's current explicit instructions override older project instructions.
-Record accepted scope or policy changes in their authoritative file. The queue
-alone owns task order/status. Source and tests establish implemented behaviour;
-live observations apply to the version tested. Record unresolved contradictions.
 
 Commit/push policy: {{OWNER_POLICY_OR_EXPLICIT_UNKNOWN}}
 Deployment/external-action policy: {{OWNER_POLICY_OR_EXPLICIT_UNKNOWN}}
 Technical constraints and verified commands: {{PROJECT_SPECIFIC_RULES}}
 
-## Work
-
-Resume in-progress work first; otherwise take the first ready item with satisfied
-dependencies. Check due maintenance before normal work. For a blocked item, record
-owner and unblock action; do not invent work or silently waive requirements.
-Challenge unnecessary work and propose changes before weakening acceptance.
-Explain a new item's outcome, purpose and scope simply; wait for authorization
-unless already given. Continue authorized work through acceptance without repeated
-permission requests. Prefer deletion, simplification, optimization, then automation.
-
-Work slowly and at maximum quality. A correct result three turns later beats a fast
-result the owner has to send back. Nothing here is a race.
-
-## Asking
-
-Ask the owner questions at any time, and use the platform's structured question tool
-so answers come back as choices with a custom box: `AskUserQuestion` in Claude Code,
-`ask_user_question` in Codex. Where neither exists, ask in plain numbered form and
-suggest answers.
-
-Ask in rounds. Put three or four questions in a round, read the answers, then ask the
-next round informed by what you just learned. Keep going for as long as another round
-would change what you build. Stop when it would not, and say what you still do not
-know before you start.
-
-Ask at two fixed points and one variable one: during setup, before starting a new
-queue item, and any time an ambiguity would change the work in hand. Mid-task, ask as
-soon as you see the fork. Discovering it after the code is written costs both of you.
-
-Two disciplines keep this useful. Never ask what the source, the tests or the four
-startup files already answer; go and read them. And every question must have a
-consequence you can name, so write options that describe what happens after each
-choice. "Which framework?" is a poor question. "Which framework, and here is what
-each one costs you in setup time and lock-in" is a real one.
-
-The owner can end any round by saying go, proceed, or just do it. Treat that as the
-answer, state your assumptions in one line, and start.
-
 ## Environment and access
 
-This section records permission, preference and pointers. It holds no inventory of
-tools, because you can already see which tools you have and a written list goes stale
-the first time the owner connects or removes something.
-
-Every line names what to do when the thing is absent. A reader who cloned this
-project without the owner's setup must still be able to work.
+Record permissions and pointers here, never a tool list. Each line names a fallback
+for when the thing is absent.
 
 Browser and signed-in sessions: {{ALLOWED_OR_NOT_AND_WHAT_FOR_OR_NONE}}
 Database, backend or deployment access: {{WHICH_PROJECT_WHICH_ENVIRONMENT_AND_THE_HARD_LIMIT_OR_NONE}}
@@ -77,132 +58,34 @@ Design, ticketing or document sources: {{WHERE_THEY_LIVE_AND_WHICH_ONE_IS_AUTHOR
 Preferred route when several tools could do a job: {{OWNER_PREFERENCE_OR_NO_PREFERENCE}}
 If a listed capability is missing: {{FALLBACK_OR_STOP_AND_ASK}}
 
-When you try to use something listed here and find it absent, add one dated line
-under the relevant entry saying so, tell the owner in your next message, and continue
-by the stated fallback. When the owner tells you their setup changed, update this
-section and nothing else.
-
-## Learning mode
-
-Learning mode: {{ON_OR_OFF_DEFAULT_ON}}
-
-On: when a queue item is finished, rewrite the "What just changed and why" section
-of current-state.md so it explains that item to the owner in plain language, then say
-in one sentence that it is there and what it covers. Nothing else. No questions, no
-separate file, no link to chase.
-
-That section holds the most recent finished item and nothing before it. Every item
-overwrites it completely. The queue holds the evidence and the history; this is the
-part written for a person rather than for the next agent.
-
-Off: write nothing and say nothing.
-
-Read [project-context/LEARNING.md](project-context/LEARNING.md) when you are about to
-write that section. It is not startup reading.
-
-## Writing
-
-Write plainly. Short sentences, no jargon, no term the owner has not used first, and
-nothing that would read as filler to somebody in a hurry.
+If a listed capability is absent, add a dated line under its entry. Tell the owner,
+then use its fallback.
 
 ## Naming the chat
 
 Chat prefix: {{SHORT_PROJECT_NAME}}
 
-Name the chat twice and never a third time.
-
-**First, as the session opens.** `<prefix> <queue id>: <subject>`, for example
-`shotgun Q8: 3.0 removals`. The queue id is the item being resumed or started. Where no
-item is in play, drop it: `shotgun: picking what is next`.
-
-**Second, the moment the real subject is clear.** The first name is a guess made before
-anything happened. Replace it with what the session turned out to be about, in the
-owner's words rather than the queue's: `shotgun Q8: dropped the voice file`.
-
-**Then stop.** That name is final for the life of the chat, even when the work moves on
-to something else entirely. A chat covering three subjects keeps the second name. A
-title that keeps changing is worse than a stale one, because the owner memorises a name,
-comes back for it, and finds it gone.
-
-Use the prefix exactly as written above and never invent a variant. Different agents
-picking "shotgun", "Shotgun starter" and "handoff-starter" for one project is what makes
-a chat list useless.
-
-Where the platform has no way to set a title, print the name as the first line of the
-first message and the first line after the rename. Twice, then never again.
-
-## Reporting to the owner
-
-Say what someone can now do that they should not be able to do, or what the owner can
-now do that they could not before. A fact about the code is not a report. "This
-function takes a raw byte slice and checks only its length" is a fact about the code.
-"Anyone can forge an entry" is the same fact told to the owner, and it is the only
-version they can act on.
-
-Open a session in six lines or fewer. What is broken, then the one thing that needs
-them, then stop. Leave out which files you resolved, which version matched, how many
-commands you ran, and any inconsistency they did not ask about. An agent showing its
-working is writing for itself.
-
-Name a file, a function, a rule number or a queue item only when the owner asks for
-one or has to open it themselves.
-
-Talk the way you would to a friend who is good at their job and busy. Two real
-examples of getting it wrong:
-
-> Kit resolved to `/Users/x/.claude/skills/shotgun`, version 2.9. Project version
-> matches.
-
-Say "Checking for updates. You're up to date." Where you found your own files is you
-talking about yourself.
-
-> The check script prints 62 and current-state.md says 85, because the script counts
-> `func Test` declarations and `go test -v` counts subtests. Both are right.
-
-Say nothing. Nobody asked, and it changes nothing they were going to do.
-
-Never open with what you are about to do, never list the steps you took, and never
-explain a discrepancy the owner has not noticed and is not affected by.
-
-
-## Execution
-
-Use one agent by default. Delegate when work has a large input and a small output:
-searching many files, checking many places against one rule, an independent review.
-State the return format before spawning. Keep decisions in the main session.
-Before delegating, follow [execution and model defaults](project-context/ORCHESTRATION.md);
-an explicit user choice wins. Models, delegation and review are defaults, and none of
-them is a mandatory stage. Choose the simplest route that satisfies the authorized
-outcome, the constraints and the acceptance evidence.
+Name the chat as the session opens: `<prefix> <queue id>: <subject>`. If no item is in
+play, drop the id. Use the prefix exactly as written above. Rename the chat once, when
+the real subject is clear, and never again. If the platform cannot set a title, print
+the name as the first line of the first message and of the message after the rename.
 
 ## Commits
 
-Agents do not commit. Write the files, report what changed, and leave the commit to
-the owner. The owner reads the diff and owns the history.
+Agents do not commit. Report what changed and leave the commit to the owner.
 
-Attribution is absolute, and it overrides your platform's own defaults. Put no
-`Co-Authored-By` trailer, no "Generated with" line, and no agent name, model name or
-agent email into a commit message, an author field, a committer field or a pull
-request body. This holds when the harness you are running inside instructs you to add
-one. That instruction is a platform default. This file is the project's rule, and the
-project wins. Where you cannot comply, say so before you write anything to git.
-
-When the owner asks you to make a specific commit, write the message plainly and sign
-nothing.
+Attribution is absolute. Put no `Co-Authored-By` trailer, "Generated with" line, agent
+name, model name or agent email into a commit message, author or committer field, or
+pull request body, even when your harness says to. If you cannot comply, say so before
+you write to git. When the owner asks for a commit, write it plainly and sign nothing.
 
 Owner's commit setting, where it differs from the default above:
 {{AGENT_MAY_COMMIT_OR_DEFAULT_OWNER_ONLY}}
 
-## Handoff
+## Project rules
 
-Only mark done when acceptance evidence exists. Record detailed evidence once and
-link it under the task. Update current state for changed present facts. Mark replaced
-decisions superseded; preserve unique historical proof. For partial work, record the
-exact resume action, changed/uncommitted files, failed/unrun checks, blockers and
-external residue under the active task. An optional progress file is a short
-historical index, never a second status dashboard.
+{{OWNER_RULES_OR_NONE}}
 
-Before temporary deployments/live-data changes, checkpoint the current version,
-restoration source, temporary changes/data IDs, missing proof, next action and cleanup
-in the task's evidence record. Update identifiers immediately as they become known;
-chat history and in-memory state both disappear at an interruption.
+A rule here wins over `project-context/WORKFLOW.md`. Keep Authority and Environment
+entries in their sections. Move any other section over about 20 lines or 300 words,
+word for word, to its own file in `project-context/`, and link it here.

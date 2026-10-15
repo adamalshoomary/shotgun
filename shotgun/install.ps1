@@ -2,7 +2,7 @@
 #
 #   powershell -NoProfile -Command "irm https://github.com/adamalshoomary/shotgun/releases/latest/download/install.ps1 | iex"
 #
-# The skill needs its whole folder: SKILL.md, VERSION, five guides and templates\.
+# The skill needs its whole folder: SKILL.md, VERSION, four guides and templates\.
 # Claude Code reads ~\.claude\skills. Codex, Gemini CLI, Cursor and most other agents read ~\.agents\skills.
 # A release holds its files flat. SHOTGUN_FROM sets another address for them; CI uses it to test a build.
 # Keep the file list in step with install.sh and tools/release_files.py.
@@ -13,7 +13,7 @@ if ($env:SHOTGUN_FROM) { $From = $env:SHOTGUN_FROM.TrimEnd('/') }
 # A release cannot hold a file whose name starts with a dot, so .gitignore.template travels as gitignore.template.
 $Files = [ordered]@{
     'SKILL.md' = 'SKILL.md'; 'VERSION' = 'VERSION'; 'SETUP.md' = 'SETUP.md'; 'CONTINUE.md' = 'CONTINUE.md'
-    'LEARNING.md' = 'LEARNING.md'; 'ORCHESTRATION.md' = 'ORCHESTRATION.md'; 'MIGRATIONS.md' = 'MIGRATIONS.md'
+    'WORKFLOW.md' = 'WORKFLOW.md'; 'MIGRATIONS.md' = 'MIGRATIONS.md'
     'AGENTS.md.template' = 'templates\AGENTS.md.template'
     'current-state.md.template' = 'templates\current-state.md.template'
     'improvement-plan.md.template' = 'templates\improvement-plan.md.template'

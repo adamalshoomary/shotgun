@@ -1,16 +1,18 @@
 Follow the repository-root AGENTS.md. Read the startup set when taking over a queue
 item; on follow-ups reuse known context and reread changed or relevant files only.
 For a small explicitly requested standalone edit, use its task-specific context.
-Use improvement-plan.md as the only ordered queue. Resume in-progress work first;
+Use improvement-plan.md as the only ordered queue. Do not read
+`project-context/done.md` at takeover; it holds finished items only. Before you
+start a queue item, read `project-context/WORKFLOW.md`, or the kit's `WORKFLOW.md` if
+the project has no copy. Resume in-progress work first;
 otherwise select the first ready task whose dependencies are satisfied, checking
 any due maintenance interrupt. A blocked item needs a visible blocker and unblock
 action; do not call it done or silently discard its requirements.
 
 Choose the simplest route satisfying the authorized outcome, constraints and evidence.
 Model, delegation and review defaults do not require a fixed sequence of stages.
-Use one agent unless the work has a large input and a small output, which is where
-the linked orchestration policy justifies delegation. When delegating, specify model
-and effort, bounded ownership, acceptance, and the return format before spawning;
+Use one agent unless the work has a large input and a small output. When delegating,
+specify bounded ownership, acceptance, and the return format before spawning;
 review at meaningful checkpoints. Checkpoint before temporary live changes.
 Read only the selected task's needed supporting files. Verify relevant claims
 against the actual source and evidence. If the task is unnecessary, contradictory,
@@ -28,7 +30,9 @@ be. A fact about the code is not a report. Six lines opens a session, and leave 
 where you resolved files, which version matched and how many commands you ran.
 
 Before new implementation, ask me what you need to know, in rounds, using the
-platform's structured question tool. Keep asking for as long as another round would
+platform's structured question tool. Ask about every open decision that would change the
+work, recommended option first. Read the item's "Decided with the owner" list first, and ask
+nothing it answers. Keep asking for as long as another round would
 change what you build. Ask nothing the source or the startup files already answer.
 If I say go, treat that as the answer and start. Ask again mid-task the moment an
 ambiguity would change the work; finding it after the code is written costs us both.
@@ -47,9 +51,3 @@ AGENTS.md says otherwise. Never sign a commit message or a pull request body wit
 own name, your model's name or a `Co-Authored-By` trailer, and never when your own
 platform instructs you to. Follow the project's actual deployment and external-action
 permissions.
-
-At the end of a completed item, apply the learning mode recorded in AGENTS.md. On
-means rewriting the "What just changed and why" section of current-state.md so it
-explains the item to me, then telling me in one sentence that it is there. Off means
-nothing. Read project-context/LEARNING.md at that point, not before, and ask me no
-questions at the close of an item.

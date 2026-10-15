@@ -6,6 +6,6 @@ Hard constraints: {{ACTUAL_CONSTRAINTS}}
 Non-goals: {{EXPLICIT_EXCLUSIONS}}
 Unvalidated assumptions: {{WHAT_NEEDS_EVIDENCE}}
 
-Describe customer outcomes rather than locking in an untested architecture.
-Advertised claims must match evidence; completeness and release requirements must
-be explicit. Any scope change belongs in the purpose/queue, not only in chat.
+Describe outcomes for the user, and leave the architecture open until it is tested.
+Match every advertised claim to evidence. State completeness and release requirements.
+Record each scope change in this file or the queue.

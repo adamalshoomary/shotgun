@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Stage the files that a shotgun release carries, and serve them the way GitHub does.
 
-A release holds its files flat: the kit's SKILL.md, VERSION, five guides and five templates,
+A release holds its files flat: the kit's SKILL.md, VERSION, four guides and five templates,
 plus install.sh and install.ps1. A release cannot hold a name that starts with a dot, so
 .gitignore.template travels as gitignore.template. The release workflow uploads the files.
 CI serves them on 127.0.0.1, then installs shotgun from that address the way a user installs
@@ -29,8 +29,7 @@ FILES = {
     "VERSION": KIT / "VERSION",
     "SETUP.md": KIT / "SETUP.md",
     "CONTINUE.md": KIT / "CONTINUE.md",
-    "LEARNING.md": KIT / "LEARNING.md",
-    "ORCHESTRATION.md": KIT / "ORCHESTRATION.md",
+    "WORKFLOW.md": KIT / "WORKFLOW.md",
     "MIGRATIONS.md": KIT / "MIGRATIONS.md",
     "AGENTS.md.template": KIT / "templates" / "AGENTS.md.template",
     "current-state.md.template": KIT / "templates" / "current-state.md.template",
