@@ -1,12 +1,12 @@
 ---
-name: handoff
-description: Run the repository-based agent handoff system in this project. Use for setting up the handoff files in a new project, taking over queue work from another agent or another session, changing learning mode, or reporting queue status. Triggers on "set up handoff", "continue the queue", "what is next in the plan", "take over this project", "learning mode".
+name: shotgun
+description: Run the shotgun handoff system in this project, so any coding agent can resume work another one stopped. Use for setting up the handoff files in a new project, taking over queue work from another agent or another session, changing learning mode, reporting queue status, or updating shotgun. Triggers on "shotgun", "set up handoff", "continue the queue", "what is next in the plan", "take over this project", "learning mode".
 argument-hint: setup | continue | status | learn <on|off> | explain | update
 arguments: [command, value]
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, WebFetch, WebSearch
 ---
 
-# Handoff
+# Shotgun
 
 The command is the first word the user typed after the skill name, and any second word
 is its value. Claude Code substitutes them below as `$0` and `$1`; on a platform that
@@ -33,7 +33,7 @@ your own files is you talking about yourself. Never search the disk for these fi
 never assume the user is sitting inside the kit.
 
 If `<kit>` has only this file in it and nothing else, the install was incomplete. Say so
-and tell the user to reinstall with `npx skills add adamalshoomary-ctrl/shotgun`, which
+and tell the user to reinstall with the install command under `update` below, which
 brings the whole directory. Do not try to carry on without the supporting files.
 
 The `.md` files in the project are the source of truth. This skill routes to them
@@ -44,7 +44,7 @@ reads the same files without this skill, so never write a rule that lives only h
 
 Read `<kit>/SETUP.md` and apply it to the current project root.
 Confirm the root before writing anything. Ask the owner the learning-mode question
-that `<kit>/SETUP.md` specifies, and write the number into the new AGENTS.md.
+that `<kit>/SETUP.md` specifies, and write `on` or `off` into the new AGENTS.md.
 
 ## continue
 
@@ -85,21 +85,26 @@ installed on this machine, then the project.
 
 ### First, the kit
 
-1. Read `<kit>/VERSION`, then fetch the published one:
+1. Read `<kit>/VERSION`, then fetch the version of the latest release:
 
-       curl -fsSL https://raw.githubusercontent.com/adamalshoomary-ctrl/shotgun/main/VERSION
+       curl -fsSL https://github.com/adamalshoomary/shotgun/releases/latest/download/VERSION
 
    Say one of three things and nothing else. "Checking for updates." Then either
-   "You're up to date." or "There's a newer version, 3.1. You're on 3.0." If the fetch
-   fails: "Couldn't check for updates, carrying on with what you have." A failed check
-   is never proof the kit is current.
+   "You're up to date." or "There's a newer version, 4.1.0. You're on 4.0.0." If the
+   fetch fails: "Couldn't check for updates, carrying on with what you have." A failed
+   check is never proof the kit is current.
 
    Do not name the kit, the path, the curl command, or the word `VERSION`. The user
    wants to know whether there is an update.
 
-2. When the published version is newer, show this command and wait:
+2. When the published version is newer, show the install command for this computer
+   and wait. On macOS or Linux:
 
-       npx skills add adamalshoomary-ctrl/shotgun -g
+       curl -fsSL https://github.com/adamalshoomary/shotgun/releases/latest/download/install.sh | sh
+
+   On Windows:
+
+       powershell -NoProfile -Command "irm https://github.com/adamalshoomary/shotgun/releases/latest/download/install.ps1 | iex"
 
    On go, run it, tell the owner to restart their agent before the new instructions
    take effect, and carry on with the project using the kit as it is now. You are
@@ -111,8 +116,9 @@ installed on this machine, then the project.
 
 ### Then, the project
 
-3. Read `Handoff system version:` from the project's AGENTS.md and compare it to
-   `<kit>/VERSION`.
+3. Read `Shotgun version:` from the project's AGENTS.md and compare it to
+   `<kit>/VERSION`. A project set up before 4.0.0 records it as
+   `Handoff system version:` instead. Read that line the same way.
 
    Equal: say so and stop.
 
@@ -120,10 +126,10 @@ installed on this machine, then the project.
 
    Project newer: stop, and do not apply anything. Downgrading a project is never what
    the owner asked for. Before you report it, check whether the project folder itself
-   holds `templates/` and `MIGRATIONS.md`. If it does, this project is the kit's own
+   holds `shotgun/skills/shotgun/SKILL.md`. If it does, this project is the kit's own
    source, it is meant to run ahead of any install, and there is nothing to update; say
    that and stop. Otherwise name the likely cause, which is a stale kit, and point at
-   the reinstall command above.
+   the install command above.
 4. Compare structure, never content. For each file in `<kit>/templates/`, list the section
    headings and marker lines the template carries, and check the project's
    corresponding file for each one. Check file presence too:
@@ -195,7 +201,7 @@ instead, on those same two occasions.
 Talk the way you would to a friend who is good at their job and busy. Two real
 examples of getting it wrong:
 
-> Kit resolved to `/Users/x/.claude/skills/handoff`, version 2.9. Project version
+> Kit resolved to `/Users/x/.claude/skills/shotgun`, version 2.9. Project version
 > matches.
 
 Say "Checking for updates. You're up to date." Where you found your own files is you

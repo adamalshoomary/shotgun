@@ -1,6 +1,6 @@
 # Migrations
 
-`/handoff update` works by comparing structure. It reads each file in `templates/`,
+`/shotgun update` works by comparing structure. It reads each file in `templates/`,
 reads the project's corresponding file, and compares section headings, marker lines
 and file presence. Anything the template carries and the project lacks is a feature
 the project has not adopted yet.
@@ -18,6 +18,30 @@ as instructions to an agent.
 
 Format: one block per version, newest first. An agent reads only the blocks above the
 version recorded in the project's AGENTS.md.
+
+---
+
+## 4.0.0 (2026-10-15)
+
+**The command is now `/shotgun`.** It was `/handoff`. Codex users type `$shotgun`.
+The skill installs to `~/.claude/skills/shotgun` and `~/.agents/skills/shotgun`.
+The installer removes an old `handoff` skill folder only when its `SKILL.md` names
+the shotgun repository.
+
+**The version line is renamed.** In AGENTS.md, `Handoff system version:` becomes
+`Shotgun version:`. The paragraph under it names `/handoff update`, which becomes
+`/shotgun update`. Show the owner the current lines and the new lines side by side,
+then ask before you change them.
+
+Search the rest of the project's AGENTS.md for `/handoff`. Show each line that holds
+it, propose the same line with `/shotgun`, and ask once for all of them.
+
+**Updates come from GitHub releases.** The update check reads `VERSION` from the
+latest release. A kit older than 4.0.0 reads it from the repository root, where it no
+longer exists, so an old kit reports that it could not check. Tell the owner to
+install again with the command in the README.
+
+No other project file changes.
 
 ---
 

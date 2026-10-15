@@ -38,18 +38,18 @@ fact, and it is shorter to read than five placeholders.
 
 ## What to write
 
-Adapt the five files in this starter's templates directory, removing `.template`
+Adapt the five files in the kit's `templates/` directory, removing `.template`
 from the output names. Replace every placeholder with a verified fact, an explicit
 unknown, or an actionable question. Keep rules independent of a particular model
 or platform; add only the actual project's technical constraints and real commands.
-Take nothing from the folder that supplied this starter except `templates/` and the
-supporting documents named below. That folder keeps its own `AGENTS.md`,
-`current-state.md`, `project-purpose.md` and `improvement-plan.md`,
-recording the work of maintaining the starter, and its ticketing details and accounts
-belong to it too. A target project starts its four files from the templates, filled in
-with facts you verified in the target.
+Take nothing from the kit except `templates/` and the supporting documents named
+below. The maintainer's own copy of the shotgun source also holds an `AGENTS.md`,
+`current-state.md`, `project-purpose.md` and `improvement-plan.md` at its root.
+Those record the work of maintaining shotgun, and nothing in them belongs to the
+target. A target project starts its four files from the
+templates, filled in with facts you verified in the target.
 
-Copy this starter's ORCHESTRATION.md and LEARNING.md into the target's
+Copy the kit's ORCHESTRATION.md and LEARNING.md into the target's
 `project-context/` directory. Both are optional references linked from AGENTS.md,
 and neither one is startup reading. Adapt the model preference table to the owner's
 platform, keeping every explicit choice the owner has stated. Install no profiles
@@ -95,9 +95,9 @@ Authority section.
 
 ## Version stamp
 
-Copy the starter's `VERSION` contents into the `Handoff system version:` line at the
-top of the project's AGENTS.md. One line, and it is what lets `/handoff update` work
-out later what the project is missing.
+Copy the kit's `VERSION` contents into the `Shotgun version:` line at the top of the
+project's AGENTS.md. One line, and it is what lets `/shotgun update` work out later
+what the project is missing.
 
 ## How to structure it
 
@@ -124,8 +124,7 @@ then optimization, then automation; install no memory infrastructure by default.
 
 Check links, placeholders, authority conflicts and startup size. Verify the
 execution reference link, the learning reference link, the main and worker model
-preferences, and the pre-change checkpoint rule. Use the
-quality questions in the starter README and simulate partial and blocked task
+preferences, and the pre-change checkpoint rule. Simulate partial and blocked task
 handoffs. Explain the folder, the first task and how to continue with another agent.
 
 Write the setup summary the way every later report has to read: plain, short, and

@@ -1,0 +1,38 @@
+name: release
+
+# When the owner publishes a release on github.com, this attaches the files that the installers
+# and the update check download. Then it installs shotgun from the release to prove it.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  attach:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - name: Check that the tag matches VERSION
+        run: |
+          want="v$(cut -d' ' -f1 shotgun/skills/shotgun/VERSION)"
+          if [ "$TAG" != "$want" ]; then
+            echo "The release tag is $TAG, but shotgun/skills/shotgun/VERSION says $want. Change one of them, then publish again." >&2
+            exit 1
+          fi
+      - name: Attach the release files
+        run: |
+          python3 shotgun/tools/release_files.py "$RUNNER_TEMP/release"
+          gh release upload "$TAG" "$RUNNER_TEMP"/release/* --clobber --repo "$GITHUB_REPOSITORY"
+      - name: Install shotgun from this release
+        run: |
+          base="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
+          cd "$RUNNER_TEMP"
+          curl -fsSL "$base/install.sh" | SHOTGUN_FROM="$base" sh
+          python3 "$GITHUB_WORKSPACE/shotgun/tools/check_install.py"

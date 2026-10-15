@@ -1,10 +1,10 @@
 # Working in this project
 
-Handoff system version: {{VERSION_FROM_STARTER_VERSION_FILE}}
+Shotgun version: {{VERSION_FROM_KIT_VERSION_FILE}}
 
 Leave that line alone unless you are running an update. It records which version of
-the handoff system this project adopted, and `/handoff update` reads it to work out
-what has changed since.
+shotgun this project adopted, and `/shotgun update` reads it to work out what has
+changed since.
 
 When a new agent takes over a queue item, read this file, current-state.md,
 project-purpose.md, and improvement-plan.md in order. For follow-ups, reuse known
@@ -150,7 +150,7 @@ one or has to open it themselves.
 Talk the way you would to a friend who is good at their job and busy. Two real
 examples of getting it wrong:
 
-> Kit resolved to `/Users/x/.claude/skills/handoff`, version 2.9. Project version
+> Kit resolved to `/Users/x/.claude/skills/shotgun`, version 2.9. Project version
 > matches.
 
 Say "Checking for updates. You're up to date." Where you found your own files is you

@@ -1,0 +1,68 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # The installers download the release files, as they do for a user. A local server answers
+      # the way GitHub releases do: a redirect, then the file as application/octet-stream.
+      # Before each first install, CI plants shotgun's old "handoff" copy in ~/.claude and another
+      # author's "handoff" skill in ~/.agents. The installer must remove the first and keep the second.
+      - name: Install with install.sh
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          mkdir -p ~/.claude/skills/handoff ~/.agents/skills/handoff
+          printf -- '---\nname: handoff\n---\nnpx skills add adamalshoomary-ctrl/shotgun\n' > ~/.claude/skills/handoff/SKILL.md
+          printf -- '---\nname: handoff\n---\nAnother author.\n' > ~/.agents/skills/handoff/SKILL.md
+          python shotgun/tools/release_files.py "$RUNNER_TEMP/release" --serve 8765 &
+          for i in $(seq 1 40); do curl -fs http://127.0.0.1:8765/latest/download/VERSION >/dev/null && break; sleep 0.5; done
+          cd "$RUNNER_TEMP"
+          curl -fsSL http://127.0.0.1:8765/latest/download/install.sh | SHOTGUN_FROM=http://127.0.0.1:8765/latest/download sh
+          python "$GITHUB_WORKSPACE/shotgun/tools/check_install.py" --old-copies
+      - name: Install from a clone with install.sh
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          sh shotgun/install.sh
+          python shotgun/tools/check_install.py
+      - name: Install with install.ps1 in Windows PowerShell 5.1
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path "$HOME\.claude\skills\handoff", "$HOME\.agents\skills\handoff" | Out-Null
+          Set-Content -Path "$HOME\.claude\skills\handoff\SKILL.md" -Value "---`nname: handoff`n---`nnpx skills add adamalshoomary-ctrl/shotgun"
+          Set-Content -Path "$HOME\.agents\skills\handoff\SKILL.md" -Value "---`nname: handoff`n---`nAnother author."
+          $server = Start-Process python -ArgumentList 'shotgun\tools\release_files.py', "$env:RUNNER_TEMP\release", '--serve', '8765' -PassThru -WindowStyle Hidden
+          for ($i = 0; $i -lt 40; $i++) { try { Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8765/latest/download/VERSION | Out-Null; break } catch { Start-Sleep -Milliseconds 500 } }
+          $env:SHOTGUN_FROM = 'http://127.0.0.1:8765/latest/download'
+          irm http://127.0.0.1:8765/latest/download/install.ps1 | iex
+          python shotgun\tools\check_install.py --old-copies
+          $code = $LASTEXITCODE
+          Stop-Process -Id $server.Id
+          exit $code
+      - name: Install with install.ps1 in PowerShell 7
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Remove-Item -Recurse -Force "$HOME\.claude\skills\shotgun", "$HOME\.agents\skills\shotgun" -ErrorAction SilentlyContinue
+          $server = Start-Process python -ArgumentList 'shotgun\tools\release_files.py', "$env:RUNNER_TEMP\release7", '--serve', '8766' -PassThru -WindowStyle Hidden
+          for ($i = 0; $i -lt 40; $i++) { try { Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8766/latest/download/VERSION | Out-Null; break } catch { Start-Sleep -Milliseconds 500 } }
+          $env:SHOTGUN_FROM = 'http://127.0.0.1:8766/latest/download'
+          irm http://127.0.0.1:8766/latest/download/install.ps1 | iex
+          python shotgun\tools\check_install.py
+          $code = $LASTEXITCODE
+          Stop-Process -Id $server.Id
+          exit $code
