@@ -40,6 +40,37 @@ The `.md` files in the project are the source of truth. This skill routes to the
 and adds nothing of its own. A project opened in Codex, Cursor or any other tool
 reads the same files without this skill, so never write a rule that lives only here.
 
+## Before every command
+
+Run this check once per chat, on the first `/shotgun` command. Skip it if you already
+ran it in this chat, and skip it for `update`, which does the same work itself.
+
+1. Run one shell command that prints three things: the kit's version, the latest
+   release's version and the project's version line. On macOS or Linux:
+
+       cat "<kit>/VERSION"; curl -fsSL --max-time 4 "${SHOTGUN_FROM:-https://github.com/adamalshoomary/shotgun/releases/latest/download}/VERSION" 2>/dev/null || echo OFFLINE; grep -m1 -E "^(Shotgun|Handoff system) version:" AGENTS.md
+
+   On Windows, in PowerShell:
+
+       Get-Content "<kit>\VERSION"; $f = if ($env:SHOTGUN_FROM) { $env:SHOTGUN_FROM } else { 'https://github.com/adamalshoomary/shotgun/releases/latest/download' }; try { irm -TimeoutSec 4 "$f/VERSION" } catch { 'OFFLINE' }; Select-String -Path AGENTS.md -Pattern '^(Shotgun|Handoff system) version:' | Select-Object -First 1
+
+2. Compare the first word of each version as numbers.
+3. The release is newer than the kit when it prints a higher number. The project is
+   behind when its version line is lower than the kit's. A project with no AGENTS.md,
+   or one that holds `shotgun/skills/shotgun/SKILL.md`, is never behind.
+4. If neither is out of date, or the release check printed `OFFLINE`, say nothing and
+   run the command.
+5. Otherwise, ask one question with the structured question tool before the command
+   runs. Name the versions, for example: "Shotgun 5.1.0 is out, and you're on 5.0.0.
+   Update before I continue?" If only the project is behind, say: "This project uses
+   shotgun 4.0.0, and you have 5.1.0 installed. Update its files before I continue?"
+   Offer three options:
+   - "Update now (Recommended)": run `update`, then run the command the owner typed.
+   - "After this": run the command, then run `update`.
+   - "Not now": run the command. Write nothing. The next chat asks again.
+
+Never name the kit path, the shell command or the word `VERSION` to the owner.
+
 ## setup
 
 Read `<kit>/SETUP.md` and apply it to the current project root.
@@ -78,16 +109,19 @@ installed on this machine, then the project.
 
        curl -fsSL https://github.com/adamalshoomary/shotgun/releases/latest/download/VERSION
 
-   Say one of three things and nothing else. "Checking for updates." Then either
-   "You're up to date." or "There's a newer version, 4.1.0. You're on 4.0.0." If the
-   fetch fails: "Couldn't check for updates, carrying on with what you have." A failed
-   check is never proof the kit is current.
+   When the owner typed `update`, say one of three things and nothing else. "Checking
+   for updates." Then either "You're up to date." or "There's a newer version, 5.1.0.
+   You're on 5.0.0." If the fetch fails: "Couldn't check for updates, carrying on with
+   what you have." A failed check is never proof the kit is current. When the check
+   before a command started this update, the owner has already said yes. Say nothing
+   here and continue.
 
    Do not name the kit, the path, the curl command, or the word `VERSION`. The user
    wants to know whether there is an update.
 
-2. When the published version is newer, show the install command for this computer
-   and wait. On macOS or Linux:
+2. When the published version is newer and the owner typed `update`, show the install
+   command for this computer and wait for a yes. When the check before a command
+   started this update, run it at once. On macOS or Linux:
 
        curl -fsSL https://github.com/adamalshoomary/shotgun/releases/latest/download/install.sh | sh
 
@@ -95,10 +129,13 @@ installed on this machine, then the project.
 
        powershell -NoProfile -Command "irm https://github.com/adamalshoomary/shotgun/releases/latest/download/install.ps1 | iex"
 
-   On go, run it, tell the owner to restart their agent before the new instructions
-   take effect, and carry on with the project using the kit as it is now. You are
-   executing instructions you may have just overwritten; the copy in your context is
-   the one you finish this run with, and the new one applies next session.
+   Do not repeat the installer's line about restarting. If `SHOTGUN_FROM` is set, keep
+   it set for the install, so a test installs from the
+   same place it checked.
+
+   After the install, read `<kit>/SKILL.md` and `<kit>/MIGRATIONS.md` again from disk.
+   The copies in your context are the old version. Follow the new files for the rest of
+   this update and for the command the owner typed. No restart is needed.
 
    The owner can decline. Continue with the kit they have and say which version you
    used.
@@ -109,7 +146,8 @@ installed on this machine, then the project.
    `<kit>/VERSION`. A project set up before 4.0.0 records it as
    `Handoff system version:` instead. Read that line the same way.
 
-   Equal: say so and stop.
+   Equal: say so and stop. When the check before a command started this update, say
+   nothing and go back to the command.
 
    Project older: continue below. This is the normal case.
 
@@ -135,15 +173,20 @@ installed on this machine, then the project.
    in an empty queue, is not missing either.
 6. Read `<kit>/MIGRATIONS.md`, and only the blocks above the project's recorded version.
    Those carry the changes structure cannot show.
-7. Present a plan: which file, which section or file is missing, what you would add,
-   and which values the owner has to choose. Name anything you checked and judged
-   present under different wording, so the owner can correct you. Then stop and wait.
-8. On go, apply it, ask the owner for any value a migration block says to ask for,
-   and set the version line to the version in `<kit>/VERSION`.
+7. Write one summary of every change, in plain words, one line each. Do not name
+   headings or marker lines the owner never wrote. Put every change that deletes or
+   rewrites the owner's text in a separate list at the end, with the text it removes.
+   Name anything you judged present under different wording.
+8. Ask once, with the structured question tool. Options: "Apply all (Recommended)",
+   "Go through each change", "Not now". Ask for any value a migration block needs in
+   the same round.
+9. On "Apply all", apply every change. On "Go through each change", ask once for each
+   change in the separate list, then apply the rest. A migration block that says to ask
+   for each change is satisfied by this summary.
+10. Set the version line to the version in `<kit>/VERSION`. Tell the owner in one
+    sentence what they can now do that they could not before.
 
-Add and ask. Never rewrite existing content and never reorder a queue. When a
-migration block calls for a change to something already written, show the owner the
-current text and the proposed text side by side and ask. A `learning/` directory left
+Never delete owner text that the summary did not show. Never reorder a queue. A `learning/` directory left
 by an older version is the owner's history: leave it exactly as it is.
 
 One file is the exception. `project-context/WORKFLOW.md` is kit text. Replace it whole

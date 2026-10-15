@@ -21,6 +21,15 @@ version recorded in the project's AGENTS.md.
 
 ---
 
+## 5.1.0 (2026-10-15)
+
+**No project file changes.** The kit now checks for updates on the first `/shotgun`
+command in each chat, and `/shotgun update` asks once for all changes. Set the version
+line. Tell the owner in one sentence that the first command in each chat now checks
+for updates.
+
+---
+
 ## 5.0.0 (2026-10-15)
 
 **Finished items leave the queue.** A done or rejected item moves, word for word, to
